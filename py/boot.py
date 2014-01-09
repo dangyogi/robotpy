@@ -1,3 +1,5 @@
+# boot.py
+
 import sys
 
 class RollbackImporter:
@@ -29,26 +31,36 @@ def main():
     import gc
     import time
     #import runpy
+    print("Importing runner")
+    from RobotLib import runner
+    print("runner imported")
 
     while True:
         rollback = RollbackImporter()
         robot = None
         try:
-            print("Importing user code.")
-            robot = __import__("robot")
+            #print("Importing user code.")
+            #robot = __import__("robot")
             print("Running user code.")
-            robot.run()
+            #robot.run()
+            runner.run()
             #runpy.run_module("robot", run_name="__main__")
-        except SystemExit:
-            pass
+        except SystemExit as e:
+            print("User code raised SystemExit", str(e))
         except:
-            print("Exception in user code, type 'reboot' to restart:")
+            print("Exception in user code.")
             print("-"*60)
             traceback.print_exc(file=sys.stdout)
             print("-"*60)
-            return
+        else:
+            print("Robot program terminated normally")
 
-        print("User code raised SystemExit; waiting 5 seconds before restart")
+        # The following code doesn't work to restart the program.  It doesn't
+        # re-initialize the socket module properly.  So we'll punt back to the
+        # FRC_UserProgram and let it do the restart.
+        raise SystemRestart
+
+        print("Waiting 5 seconds before restart...")
         time.sleep(5)
         sys.exc_traceback = None
         sys.last_traceback = None

@@ -2,7 +2,7 @@ SUBDIRS =
 SUBDIRS += FRC_UserProgram
 SUBDIRS += RobotPy
 SUBDIRS += Modules
-SUBDIRS += Packages
+#SUBDIRS += Packages
 
 .PHONY: all clean dist pre-dist do-dist post-dist $(SUBDIRS) VERSION-FILE.h
 
@@ -25,7 +25,7 @@ do-dist:: $(addsuffix -dist,$(SUBDIRS))
 	@$(MAKE) -C $* DISTDIR=$(DISTDIR) dist
 
 pre-dist:
-	$(eval version := $(shell cat VERSION-FILE))
+	$(eval version := $(shell sed 's/ //g' VERSION-FILE))
 	$(eval DISTDIR := $(CURDIR)/RobotPy-$(version))
 	@echo $(DISTDIR)
 	-rm -rf $(DISTDIR)

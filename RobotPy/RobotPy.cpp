@@ -29,8 +29,9 @@
 #include <taskLib.h>
 #include <moduleLib.h>
 #include <unldLib.h>
-#include "NetworkCommunication/FRCComm.h"
-#include "NetworkCommunication/symModuleLink.h"
+/* #include "NetworkCommunication/FRCComm.h"
+   #include "NetworkCommunication/symModuleLink.h"
+*/
 #include "../VERSION-FILE.h"
 
 #define ROBOTPY_BOOT "/c/py/boot.py"
@@ -50,20 +51,27 @@ RobotPy_Run()
     if (FILE* f = fopen(ROBOTPY_BOOT, "r"))
     {
 	PyObject *m = PyImport_AddModule("__main__");
-	if (m == NULL)
-	    goto hang;
+	if (m == NULL) {
+            puts("PyImport_AddModule failed");
+	    goto exception_hang;
+        }
 	PyObject *d = PyModule_GetDict(m);
 	if (PyDict_GetItemString(d, "__file__") == NULL) {
 	    PyObject *fn;
 	    fn = PyUnicode_DecodeFSDefault(ROBOTPY_BOOT);
-	    if (fn == NULL)
-		goto hang;
+	    if (fn == NULL) {
+                puts("PyUnicode_DecodeFSDefault failed");
+		goto exception_hang;
+            }
 	    if (PyDict_SetItemString(d, "__file__", fn) < 0) {
 		Py_DECREF(fn);
-		goto hang;
+                puts("PyDict_SetItemString '__file__' failed");
+		goto exception_hang;
 	    }
-	    if (PyDict_SetItemString(d, "__cached__", Py_None) < 0)
-		goto hang;
+	    if (PyDict_SetItemString(d, "__cached__", Py_None) < 0) {
+                puts("PyDict_SetItemString '__cached__' failed");
+		goto exception_hang;
+            }
 	    Py_DECREF(fn);
 	}
         PyObject *v = PyRun_File(f, ROBOTPY_BOOT, Py_file_input, d, d);
@@ -74,10 +82,31 @@ RobotPy_Run()
 	    Py_Finalize();
 	    return 0; // will force restart at outer layer
 	}
-	Py_DECREF(v);
+        if (v == NULL) {
+            puts("PyRun_File failed");
+            goto exception_hang;
+        } else {
+            puts("PyRun_File terminated normally");
+            Py_DECREF(v);
+            goto hang;
+        }
     }
-    else
+    else {
 	puts("Could not open " ROBOTPY_BOOT);
+        goto hang;
+    }
+
+exception_hang:
+    PyObject *exc = PyErr_Occurred();
+    if (exc) {
+        PyTypeObject *etyp = exc->ob_type;
+        if (etyp == &PyType_Type) {
+            etyp = (PyTypeObject *)exc;
+        }
+        puts(etyp->tp_name);
+    } else {
+        puts("thought there was an exception, but PyErr_Occurred says no");
+    }
 
 hang:
     puts(ROBOTPY_BOOT " ended; terminating program");
