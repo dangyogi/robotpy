@@ -32,7 +32,7 @@
 /* #include "NetworkCommunication/FRCComm.h"
    #include "NetworkCommunication/symModuleLink.h"
 */
-#include "../VERSION-FILE.h"
+#include "RobotPy.h"
 
 #define ROBOTPY_BOOT "/c/py/boot.py"
 

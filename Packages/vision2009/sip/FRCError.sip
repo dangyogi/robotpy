@@ -22,7 +22,7 @@
 //
 
 %ModuleCode
-#include <Vision2009/FRCError.h>
+#include <Vision2009/FrcError.h>
 %End
 
 enum {
@@ -45,5 +45,5 @@ enum {
 };
 
 int GetLastVisionError();
-char* GetVisionErrorText(int errorCode);
+const char* GetVisionErrorText(int errorCode);
 
