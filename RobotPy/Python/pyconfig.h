@@ -1,4 +1,4 @@
-/* pyconfig.h.in.  Generated from configure.in by autoheader.  */
+/* pyconfig.h.in.  Generated from configure.ac by autoheader.  */
 
 
 #ifndef Py_PYCONFIG_H
@@ -98,6 +98,9 @@
 /* define to 1 if your sem_getvalue is broken. */
 #undef HAVE_BROKEN_SEM_GETVALUE
 
+/* Define if `unsetenv` does not return an int. */
+#undef HAVE_BROKEN_UNSETENV
+
 /* Define this if you have the type _Bool. */
 #undef HAVE_C99_BOOL
 
@@ -174,6 +177,9 @@
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #define HAVE_DIRENT_H 1
+
+/* Define if you have the 'dirfd' function or macro. */
+#undef HAVE_DIRFD
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
@@ -370,6 +376,12 @@
 
 /* Define to 1 if you have the `initgroups' function. */
 #undef HAVE_INITGROUPS
+
+/* Define if your compiler provides int32_t. */
+#define HAVE_INT32_T 1
+
+/* Define if your compiler provides int64_t. */
+#define HAVE_INT64_T 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -783,6 +795,9 @@
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
 
+/* Define to 1 if you have the <sys/syscall.h> header file. */
+#undef HAVE_SYS_SYSCALL_H
+
 /* Define to 1 if you have the <sys/termio.h> header file. */
 #undef HAVE_SYS_TERMIO_H
 
@@ -853,6 +868,12 @@
 
 /* Define this if you have tcl and TCL_UTF_MAX==6 */
 #undef HAVE_UCS4_TCL
+
+/* Define if your compiler provides uint32_t. */
+#define HAVE_UINT32_T 1
+
+/* Define if your compiler provides uint64_t. */
+#define HAVE_UINT64_T 1
 
 /* Define to 1 if the system has the type `uintptr_t'. */
 #undef HAVE_UINTPTR_T
@@ -951,13 +972,13 @@
 #define PACKAGE_STRING "python 3.2"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "python-3.2.2"
+#define PACKAGE_TARNAME "python-3.2.5"
 
 /* Define to the home page for this package. */
 #define PACKAGE_URL "http://www.python.org/"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.2.2"
+#define PACKAGE_VERSION "3.2.5"
 
 /* Define if POSIX semaphores aren't enabled on your system */
 #undef POSIX_SEMAPHORES_NOT_ENABLED
@@ -978,7 +999,11 @@
 #define PY_UNICODE_TYPE unsigned short
 
 /* Define if you want to build an interpreter with many run-time checks. */
+#ifndef NDEBUG
+#define Py_DEBUG
+#else 
 #undef Py_DEBUG
+#endif
 
 /* Defined if Python is built as a shared library. */
 #undef Py_ENABLE_SHARED
@@ -991,9 +1016,6 @@
 
 /* Define if setpgrp() must be called as setpgrp(0, 0). */
 #undef SETPGRP_HAVE_ARG
-
-/* Define this to be extension of shared libraries (including the dot!). */
-#undef SHLIB_EXT
 
 /* Define if i>>j for signed int i does not extend the sign bit when i < 0 */
 #undef SIGNED_RIGHT_SHIFT_ZERO_FILLS
