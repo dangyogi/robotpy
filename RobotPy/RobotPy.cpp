@@ -42,6 +42,8 @@ char ** environ = NULL;
 extern "C" INT32
 RobotPy_Run()
 {
+    PyObject *exc;
+
     puts("RobotPy " ROBOTPY_VERSION);
 
     /* Initialize the Python interpreter.  Required. */
@@ -100,7 +102,7 @@ RobotPy_Run()
     }
 
 exception_hang:
-    PyObject *exc = PyErr_Occurred();
+    exc = PyErr_Occurred();
     if (exc) {
         PyTypeObject *etyp = exc->ob_type;
         if (etyp == &PyType_Type) {

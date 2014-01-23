@@ -19,12 +19,12 @@ include(RobotLayout)
 # the SIP python module source in our build tree)
 #
 
-find_package(PythonInterp REQUIRED)
-find_package(SIP 4.15.3 EXACT REQUIRED)
+#BEF: find_package(PythonInterp REQUIRED)
+#BEF: find_package(SIP 4.15.3 EXACT REQUIRED)
 
-include(SIPMacros)
-set(SIP_INCLUDES .)
-set(SIP_EXTRA_OPTIONS -g)
+#BEF: include(SIPMacros)
+#BEF: set(SIP_INCLUDES .)
+#BEF: set(SIP_EXTRA_OPTIONS -g)
 
 #
 # Setup packaging
@@ -53,7 +53,7 @@ include_directories(Packages/wpilib Packages/wpilib/WPILib)
 #
 
 add_subdirectory("FRC_UserProgram")
-add_subdirectory("Packages")
+#BEF: add_subdirectory("Packages")
 add_subdirectory("RobotPy")
 
 #
